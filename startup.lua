@@ -23,6 +23,7 @@ local function uninstall()
     for y,x in pairs(files) do
       -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
       shell.run("fs.delete("..x..")")
+    end
 
 end
 

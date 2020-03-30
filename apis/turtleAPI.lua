@@ -6,8 +6,9 @@
 -- 1st slot: ender chest for fuel
 
 -- This is the API for most used general turtle commands
-
-variables = textutils.unserialise(fs.open("globalVariables.cfg", "rw").readAll())
+local file = fs.open("globalVariables.cfg", "r")
+variables = textutils.unserialise(file.readAll())
+file.close()
 os.loadAPI("/apis/fv.lua")
 variables = fv.read()
 
