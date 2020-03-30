@@ -14,20 +14,22 @@ local tArgs = {...}
 local function uninstall()
     files = {"startup",
              "resume",
-             "install.lua",
              "globalVariables.cfg",
              "apis",
-             "programs",
-             "uninstall.lua"}
+             "programs"}
 
     for y,x in pairs(files) do
       -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
+      print("Deleting: "..x)
       shell.run("fs.delete("..x..")")
     end
 
 end
 
 if tArgs[1] == "uninstall" then
+  uninstall()
+
+  return true
 end
 
 if not fs.exists("globalVariables.cfg") then
