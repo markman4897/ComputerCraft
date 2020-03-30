@@ -8,8 +8,6 @@
 
 -- shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/globalVariables.lua", "globalVariables.cfg")
-shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/install.lua", "install.lua")
-shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/uninstall.lua", "uninstall.lua")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/programs/mine.lua", "programs/mine.lua")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/programs/ref.lua", "programs/ref.lua")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/apis/computerAPI.lua", "apis/computerAPI.lua")

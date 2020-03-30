@@ -8,6 +8,21 @@ local tArgs = {...}
 -- Check if system has initialised, otherwise, do it now.
 -- If its initialised, checks for updates and updates the system if new version
 -- found.
+
+if tArgs[1] == "uninstall" then
+  files = {"startup",
+           "resume",
+           "install.lua",
+           "globalVariables.cfg",
+           "apis",
+           "programs",
+           "uninstall.lua"}
+
+  for y,x in pairs(files) do
+    -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
+    shell.run("fs.delete("..x..")")
+end
+
 if not fs.exists("globalVariables.cfg") then
   shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/init.lua", "init.lua")
   shell.run("init.lua")
@@ -19,7 +34,7 @@ else
   local ver = textutils.unserialise(fs.open("globalVariables.cfg", "r").readAll())
   ver.close()
   fs.delete("temp")
-  if (new_ver["version"] ~= ver["version"]) or (tArgs[1] = "reinstall") then
+  if (new_ver["version"] ~= ver["version"]) or (tArgs[1] == "reinstall") then
     -- TODO: FIX THIS LOGICALLY SOMEHOW?
     shell.run("uninstall.lua")
     shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")

@@ -6,6 +6,8 @@
 function read()
   return textutils.unserialise(fs.open("globalVariables.cfg", "r").readAll())
 
+end
+
 function write(inp)
   local f = fs.open("globalVariables.cfg", "w")
   local temp = textutils.unserialise(f.readAll())
