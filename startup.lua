@@ -3,24 +3,30 @@
 -- Startup script to make (download) environment on the first run and to
 -- properly run every consecutive time
 
+-- This script is installed by https://pastebin.com/VLTuFN08
+
 local tArgs = {...}
 
 -- Check if system has initialised, otherwise, do it now.
 -- If its initialised, checks for updates and updates the system if new version
 -- found.
 
-if tArgs[1] == "uninstall" then
-  files = {"startup",
-           "resume",
-           "install.lua",
-           "globalVariables.cfg",
-           "apis",
-           "programs",
-           "uninstall.lua"}
+local function uninstall()
+    files = {"startup",
+             "resume",
+             "install.lua",
+             "globalVariables.cfg",
+             "apis",
+             "programs",
+             "uninstall.lua"}
 
-  for y,x in pairs(files) do
-    -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
-    shell.run("fs.delete("..x..")")
+    for y,x in pairs(files) do
+      -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
+      shell.run("fs.delete("..x..")")
+
+end
+
+if tArgs[1] == "uninstall" then
 end
 
 if not fs.exists("globalVariables.cfg") then
@@ -36,7 +42,7 @@ else
   fs.delete("temp")
   if (new_ver["version"] ~= ver["version"]) or (tArgs[1] == "reinstall") then
     -- TODO: FIX THIS LOGICALLY SOMEHOW?
-    shell.run("uninstall.lua")
+    uninstall()
     shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
     shell.run("startup")
   end
