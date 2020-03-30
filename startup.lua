@@ -19,7 +19,7 @@ else
   local ver = textutils.unserialise(fs.open("globalVariables.cfg", "r").readAll())
   ver.close()
   fs.delete("temp")
-  if new_ver["version"] ~= ver["version"] or tArgs[1] = "reinstall" then
+  if (new_ver["version"] ~= ver["version"]) or (tArgs[1] = "reinstall") then
     -- TODO: FIX THIS LOGICALLY SOMEHOW?
     shell.run("uninstall.lua")
     shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
