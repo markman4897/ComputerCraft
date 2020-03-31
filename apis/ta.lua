@@ -17,15 +17,15 @@ variables = fv.read()
 
 function rotateLeft()
   turtle.turnLeft()
-  variables["dirx"], variables["dirz"] = variables["dirz"], -variables["dirx"]
-  fv.write({dirx=variables["dirx"], dirz=variables["dirz"]})
+  variables.dirx, variables.dirz = variables.dirz, -variables.dirx
+  fv.write({dirx=variables.dirx, dirz=variables.dirz})
 
 end
 
 function rotateRight()
   turtle.turnRight()
-  variables["dirx"], variables["dirz"] = -variables["dirz"], variables["dirx"]
-  fv.write({dirx=variables["dirx"], dirz=variables["dirz"]})
+  variables.dirx, variables.dirz = -variables.dirz, variables.dirx
+  fv.write({dirx=variables.dirx, dirz=variables.dirz})
 end
 
 function moveForwards()
@@ -33,9 +33,9 @@ function moveForwards()
     turtle.attack()
   end
 
-  variables["x"] = variables["x"] + variables["dirx"]
-  variables["z"] = variables["z"] + variables["dirz"]
-  fv.write({x=variables["x"], z=variables["z"]})
+  variables.x = variables.x + variables.dirx
+  variables.z = variables.z + variables.dirz
+  fv.write({x=variables.x, z=variables.z})
 end
 
 function moveBackwards()
@@ -52,9 +52,9 @@ function moveBackwards()
 
   end
 
-  variables["x"] = variables["x"] + variables["dirx"]
-  variables["z"] = variables["z"] + variables["dirz"]
-  fv.write({x=variables["x"], z=variables["z"]})
+  variables.x = variables.x + variables.dirx
+  variables.z = variables.z + variables.dirz
+  fv.write({x=variables.x, z=variables.z})
 end
 
 function moveUp()
@@ -62,8 +62,8 @@ function moveUp()
     turtle.attackUp()
   end
 
-  variables["y"] = variables["y"] + 1
-  fv.write({y=variables["y"]})
+  variables.y = variables.y + 1
+  fv.write({y=variables.y})
 end
 
 function moveDown()
@@ -71,8 +71,8 @@ function moveDown()
     turtle.attackDown()
   end
 
-  variables["y"] = variables["y"] - 1
-  fv.write({y=variables["y"]})
+  variables.y = variables.y - 1
+  fv.write({y=variables.y})
 end
 
 function moveLeft()
