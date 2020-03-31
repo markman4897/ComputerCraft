@@ -14,28 +14,12 @@
 -- This is the API for most used general turtle commands
 
 -- Variables
-
-local file = fs.open("globalVariables.cfg", "r")
-variables = textutils.unserialise(file.readAll())
-file.close()
-os.loadAPI("/apis/fv.lua")
+os.loadAPI("apis/fv.lua")
 variables = fv.read()
 
+fuelCap = turtle.getFuelLimit()
+
 violent = true
-
--- Dig functions (placeholder for later)
-
-function dig()
-  turtle.dig()
-end
-
-function digUp()
-  turtle.digUp()
-end
-
-function digDown()
-  turtle.digDown()
-end
 
 -- Rotate functions
 
@@ -52,6 +36,11 @@ function rotateRight()
   fv.write({dirx=variables.dirx, dirz=variables.dirz})
 end
 
+function rotateBack()
+  rotateLeft()
+  rotateLeft()
+end
+
 function turnTo(direction)
   local temp = fv.translate(direction)
   while variables.dirx ~= temp[1] or variables.dirz ~= temp[2]  do
@@ -62,7 +51,7 @@ end
 -- Move functions
 
 local function forward()
-  for i=1,3 do
+  for i=1,5 do
     if not turtle.forward() then
       if violent then
         turtle.attack()
@@ -93,7 +82,7 @@ local function back()
 end
 
 local function up()
-  for i=1,3 do
+  for i=1,5 do
     if not turtle.up() then
       if violent then
         turtle.attackUp()
@@ -110,7 +99,7 @@ local function up()
 end
 
 local function down()
-  for i=1,3 do
+  for i=1,5 do
     if not turtle.down() then
       if violent then
         turtle.attackDown()
@@ -213,6 +202,38 @@ function moveTo(x,y,z)
     else moveUp() end
   end
 
+end
+
+-- Dig functions
+
+function dig()
+  turtle.dig()
+  return moveForward()
+end
+
+function digUp()
+  turtle.digUp()
+  return moveUp()
+end
+
+function digDown()
+  turtle.digDown()
+  return moveDown()
+end
+
+function digRight()
+  rotateRight()
+  return dig()
+end
+
+function digLeft()
+  rotateLeft()
+  return dig()
+end
+
+function digBack()
+  rotateBack()
+  return dig()
 end
 
 -- Special functions
@@ -366,7 +387,7 @@ function refuel()
   local space = findSpaceAndPlace()
 
   if space == "left" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
       turtle.refuel(64)
     end
@@ -374,7 +395,7 @@ function refuel()
     turtle.dig()
     turnRight()
   elseif space == "right" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
       turtle.refuel(64)
     end
@@ -383,7 +404,7 @@ function refuel()
     turtle.dig()
     turnLeft()
   elseif space == "back" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
       turtle.refuel(64)
     end
@@ -393,7 +414,7 @@ function refuel()
     turnLeft()
     turnLeft()
   elseif space == "up" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suckUp(64)
       turtle.refuel(64)
     end
@@ -401,7 +422,7 @@ function refuel()
     turtle.select(1)
     turtle.digUp()
   elseif space == "down" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suckDown(64)
       turtle.refuel(64)
     end
@@ -409,7 +430,7 @@ function refuel()
     turtle.select(1)
     turtle.digDown()
   elseif space == "front" then
-    while turtle.getFuelLevel() < 20000 do
+    while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
       turtle.refuel(64)
     end

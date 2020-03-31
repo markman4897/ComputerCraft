@@ -5,7 +5,10 @@
 -- numerics to strings and back.
 
 function read()
-  return textutils.unserialise(fs.open("globalVariables.cfg", "r").readAll())
+  local file = fs.open("globalVariables.cfg", "r")
+  local temp = textutils.unserialise(file.readAll())
+  file.close()
+  return temp
 
 end
 
