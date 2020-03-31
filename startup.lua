@@ -12,16 +12,17 @@ local tArgs = {...}
 -- found.
 
 local function uninstall()
+    -- TODO:: Add "Are you sure" dialog.
     files = {"/startup",
              "/globalVariables.cfg",
              "/apis", -- folder
              "/programs", -- folder
              "/resume"}
 
-    for y,x in pairs(files) do
+    for k,v in pairs(files) do
       -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
-      print("Deleting: "..x)
-      fs.delete(x)
+      print("Deleting: "..v)
+      fs.delete(v)
     end
 
 end
