@@ -63,7 +63,8 @@ local function checkNextStep()
   if ((ta.variables.x + ta.variables.dirx) > math.max(startx, targetx)) or ((ta.variables.x + ta.variables.dirx) < math.min(startx, targetx)) then
     -- we are gonna step out of bounds on x axis
     return false
-  elseif ((ta.variables.z + ta.variables.dirz) > math.max(startz, targetz)) or ((ta.variables.z + ta.variables.dirz) < math.min(startz, targetz)) then
+  end
+  if ((ta.variables.z + ta.variables.dirz) > math.max(startz, targetz)) or ((ta.variables.z + ta.variables.dirz) < math.min(startz, targetz)) then
     --we are gonna step out of bounds on z axis
     return false
   end
@@ -126,9 +127,14 @@ local function mineLayer(layer)
 end
 
 local function mine(area)
+  local layer
   if variables.finished or done then -- done is just unnecessary safety
     return returnToStart()
   end
+
+  -- reset for recalculation
+  layer.down = false
+  layer.up = false
 
   -- get into the right height to run mineLayer()
   if ta.variables.y+1 > targety then -- super not sure if this "+1" will work or not
