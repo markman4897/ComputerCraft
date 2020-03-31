@@ -10,9 +10,9 @@ local files = {
   "programs/mine.lua",
   "programs/ref.lua",
   "programs/treeChopper.lua",
-  "apis/computerAPI.lua",
+  "apis/ca.lua",
   "apis/fv.lua",
-  "apis/turtleAPI.lua"
+  "apis/ta.lua"
 }
 
 for k,v in pairs(files) do

@@ -1,11 +1,14 @@
 --CC
 
+-- TURTLE API (ta)
+
 -- IMPORTANT!!!
 -- This library predicts that you have in your turtle inventory:
 -- 1st slot: ender chest for depositing
 -- 1st slot: ender chest for fuel
 
 -- This is the API for most used general turtle commands
+
 local file = fs.open("globalVariables.cfg", "r")
 variables = textutils.unserialise(file.readAll())
 file.close()
@@ -13,11 +16,11 @@ os.loadAPI("/apis/fv.lua")
 variables = fv.read()
 
 function moveForwards()
-  while ~turtle.moveForwards() do
+  while not turtle.moveForwards() do
     turtle.attack()
   end
 
-  -- move in virtual grid
+  -- move in virtual grid and save to variables
 end
 
 function moveBackwards()
