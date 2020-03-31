@@ -18,14 +18,14 @@ variables = fv.read()
 function rotateLeft()
   turtle.turnLeft()
   variables["dirx"], variables["dirz"] = variables["dirz"], -variables["dirx"]
-  fv.write(dirx=variables["dirx"], dirz=variables["dirz"]})
+  fv.write({dirx=variables["dirx"], dirz=variables["dirz"]})
 
 end
 
 function rotateRight()
   turtle.turnRight()
   variables["dirx"], variables["dirz"] = -variables["dirz"], variables["dirx"]
-  fv.write(dirx=variables["dirx"], dirz=variables["dirz"]})
+  fv.write({dirx=variables["dirx"], dirz=variables["dirz"]})
 end
 
 function moveForwards()
