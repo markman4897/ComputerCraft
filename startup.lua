@@ -73,7 +73,7 @@ else
   ver_f.close()
   fs.delete("temp")
   if (tArgs[1] == "reinstall") or (new_ver.version ~= ver.version) then
-    if not fs.exists("resume") then update() else print("[WARN] Will update on next boot. Program is running.")
+    if not fs.exists("resume") then update() else print("[WARN] Will update on next boot. Program is running.") end
   end
 end
 
