@@ -64,7 +64,7 @@ else
   local ver = textutils.unserialise(ver_f.readAll())
   ver_f.close()
   fs.delete("temp")
-  if (new_ver["version"] ~= ver["version"]) or (tArgs[1] == "reinstall") then
+  if (tArgs[1] == "reinstall") or (new_ver["version"] ~= ver["version"]) then
     print("[INFO] Updating framework...")
     uninstall()
     shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
