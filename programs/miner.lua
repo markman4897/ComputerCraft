@@ -158,7 +158,7 @@ local function mine(area)
 end
 
 local function start()
-  -- could move this directly into mine down below...
+  -- could move this directly into mine down below... nicer to read this way
   local area = {
     x1 = startx,
     y1 = starty,
@@ -169,10 +169,11 @@ local function start()
   }
 
   local file = fs.open("resume", "w")
-  file.write("shell.run('programs/miner.lua resume')")
+  file.write("shell.run('programs/miner.lua', 'resume')")
   file.close()
 
   while not done do
+    print("area: "..textutils.serialise(area))
     mine(area)
   end
 
