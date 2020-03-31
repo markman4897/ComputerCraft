@@ -22,7 +22,7 @@ function rotateLeft()
 end
 
 function rotateRight()
-  turtle.rotateRight
+  turtle.rotateRight()
   variables["dirx"], variables["dirz"] = -variables["dirz"], variables["dirx"]
 end
 

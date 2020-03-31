@@ -25,6 +25,7 @@ local function uninstall()
              "/programs", -- folder
              "/resume"}
 
+    -- should I use ipairs here?
     for k,v in pairs(files) do
       -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
       print("Deleting: "..v)
@@ -76,3 +77,5 @@ end
 if fs.exists("resume") then
   shell.run("resume")
 end
+
+print("[INFO] Finished startup.")
