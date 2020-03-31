@@ -16,18 +16,18 @@ os.loadAPI("/apis/fv.lua")
 variables = fv.read()
 
 function rotateLeft()
-  turtle.rotateLeft()
+  turtle.turnLeft()
   variables["dirx"], variables["dirz"] = variables["dirz"], -variables["dirx"]
 
 end
 
 function rotateRight()
-  turtle.rotateRight()
+  turtle.turnRight()
   variables["dirx"], variables["dirz"] = -variables["dirz"], variables["dirx"]
 end
 
 function moveForwards()
-  while not turtle.moveForwards() do
+  while not turtle.forward() do
     turtle.attack()
   end
 
@@ -37,11 +37,11 @@ function moveForwards()
 end
 
 function moveBackwards()
-  if not turtle.moveBackwards() then
+  if not turtle.back() then
     turtle.turnLeft()
     turtle.turnLeft()
 
-    while not turtle.moveForwards() do
+    while not turtle.forward() do
       turtle.attack()
     end
 
@@ -56,7 +56,7 @@ function moveBackwards()
 end
 
 function moveUp()
-  while not turtle.moveUp() do
+  while not turtle.up() do
     turtle.attackUp()
   end
 
@@ -65,7 +65,7 @@ function moveUp()
 end
 
 function moveDown()
-  while not turtle.moveDown() do
+  while not turtle.down() do
     turtle.attackDown()
   end
 
@@ -124,7 +124,7 @@ function findSpaceAndPlace()
     end
 
     -- look left for space
-    turtle.turnLeft()
+    turnLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -134,7 +134,7 @@ function findSpaceAndPlace()
     end
 
     -- look Back for space
-    turtle.turnLeft()
+    turnLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -144,7 +144,7 @@ function findSpaceAndPlace()
     end
 
     -- look Right for space
-    turtle.turnLeft()
+    turnLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -171,7 +171,8 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turtle.turnRight()
+    turnRight()
+
   elseif space == "right" then
     for i=2,16 do
       turtle.select(i)
@@ -180,7 +181,8 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turtle.turnLeft()
+    turnLeft()
+
   elseif space == "back" then
     for i=2,16 do
       turtle.select(i)
@@ -189,8 +191,8 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turtle.turnLeft()
-    turtle.turnLeft()
+    turnLeft()
+    turnLeft()
   elseif space == "up" then
     for i=2,16 do
       turtle.select(i)
@@ -233,7 +235,7 @@ function refuel()
     end
 
     turtle.dig()
-    turtle.turnRight()
+    turnRight()
   elseif space == "right" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
@@ -242,7 +244,7 @@ function refuel()
 
     turtle.select(1)
     turtle.dig()
-    turtle.turnLeft()
+    turnLeft()
   elseif space == "back" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
@@ -251,8 +253,8 @@ function refuel()
 
     turtle.select(1)
     turtle.dig()
-    turtle.turnLeft()
-    turtle.turnLeft()
+    turnLeft()
+    turnLeft()
   elseif space == "up" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suckUp(64)
