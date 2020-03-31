@@ -11,14 +11,6 @@ local tArgs = {...}
 -- If its initialised, checks for updates and updates the system if new version
 -- found.
 
-local function update()
-  print("[INFO] Updating framework...")
-  uninstall()
-  shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
-  shell.run("startup")
-  print("[INFO] Framework updated.")
-end
-
 local function uninstall()
     print("[INFO] Uninstallation commencing...")
     print("Are you sure you want to uninstall the framework? (y/n)")
@@ -41,6 +33,14 @@ local function uninstall()
     end
 
     print("[INFO] Uninstallation completed.")
+end
+
+local function update()
+  print("[INFO] Updating framework...")
+  uninstall()
+  shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
+  shell.run("startup")
+  print("[INFO] Framework updated.")
 end
 
 if tArgs[1] == "uninstall" then
