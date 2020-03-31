@@ -10,16 +10,18 @@
 -- TODO::
 -- - prettify code like while not place, attack etc. to local functions and make
 --   a nonviolent option (wait instead of attack) for indoor use
--- - add turnTo() function
--- - add moveTo(x,y,z) function
 
 -- This is the API for most used general turtle commands
+
+-- Variables
 
 local file = fs.open("globalVariables.cfg", "r")
 variables = textutils.unserialise(file.readAll())
 file.close()
 os.loadAPI("/apis/fv.lua")
 variables = fv.read()
+
+violent = true
 
 -- Dig functions (placeholder for later)
 
@@ -59,75 +61,131 @@ end
 
 -- Move functions
 
--- TODO:: make so they try for a certain time and then return false instead
-
-function moveForward()
-  while not turtle.forward() do
-    turtle.attack()
+local function forward()
+  for i=1,3 do
+    if not turtle.forward() do
+      if violent then
+        turtle.attack()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+    else
+      return true
+    end
   end
 
-  variables.x = variables.x + variables.dirx
-  variables.z = variables.z + variables.dirz
-  fv.write({x=variables.x, z=variables.z})
-
-  return true
+  return false
 end
 
-function moveBack()
+local function back()
   if not turtle.back() then
     turtle.turnLeft()
     turtle.turnLeft()
+    local temp = forward() -- should this be local?
 
-    while not turtle.forward() do
-      turtle.attack()
+    turtle.turnLeft()
+    turtle.turnLeft()
+    return temp
+  else
+    return true
+  end
+end
+
+local function up()
+  for i=1,3 do
+    if not turtle.up() do
+      if violent then
+        turtle.attackUp()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+    else
+      return true
     end
-
-    turtle.turnLeft()
-    turtle.turnLeft()
-
   end
 
-  variables.x = variables.x + variables.dirx
-  variables.z = variables.z + variables.dirz
-  fv.write({x=variables.x, z=variables.z})
+  return false
+end
 
-  return true
+local function down()
+  for i=1,3 do
+    if not turtle.down() do
+      if violent then
+        turtle.attackDown()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+    else
+      return true
+    end
+  end
+
+  return false
+end
+
+-- maybe could merge upper functions into lower functions
+
+function moveForward()
+  if forward() then
+    variables.x = variables.x + variables.dirx
+    variables.z = variables.z + variables.dirz
+    fv.write({x=variables.x, z=variables.z})
+
+    return true
+  else
+    return false
+  end
+end
+
+function moveBack()
+  if back() then
+    variables.x = variables.x + variables.dirx
+    variables.z = variables.z + variables.dirz
+    fv.write({x=variables.x, z=variables.z})
+
+    return true
+  else
+    return false
+  end
 end
 
 function moveUp()
-  while not turtle.up() do
-    turtle.attackUp()
+  if up() then
+    variables.y = variables.y + 1
+    fv.write({y=variables.y})
+
+    return true
+  else
+    return false
   end
-
-  variables.y = variables.y + 1
-  fv.write({y=variables.y})
-
-  return true
 end
 
 function moveDown()
-  while not turtle.down() do
-    turtle.attackDown()
+  if down() then
+    variables.y = variables.y - 1
+    fv.write({y=variables.y})
+
+    return true
+  else
+    return false
   end
-
-  variables.y = variables.y - 1
-  fv.write({y=variables.y})
-
-  return true
 end
 
+-- if this returns false it still rotated!!
 function moveLeft()
   rotateLeft()
-  moveForward()
 
-  return true
+  return moveForward()
 end
 
+-- if this returns false it still rotated!!
 function moveRight()
   rotateRight()
-  moveForward()
 
-  return true
+  return moveForward()
 end
 
 function moveTo(x,y,z)
