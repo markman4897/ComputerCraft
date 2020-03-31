@@ -51,7 +51,8 @@ function rotateRight()
 end
 
 function turnTo(direction)
-  while {variables.dirx, variables.dirz} ~= fv.translate(direction) do
+  local temp = fv.translate(direction)
+  while variables.dirx ~= temp[1] and variables.dirz ~= temp[2]  do
     rotateLeft()
   end
 end
@@ -123,21 +124,24 @@ function moveTo(x,y,z)
     turnTo("north")
   else
     turnTo("south")
+  end
   while (not z == variables.z) do
-    if not moveForward() then moveUp()
+    if not moveForward() then moveUp() end
   end
   -- move on x axis
   if x < variables.x then
     turnTo("west")
   else
     turnTo("east")
+  end
   while (not x == variables.x) do
-    if not moveForward() then moveUp()
+    if not moveForward() then moveUp() end
   end
   -- move on y axis
   while (not y == variables.y) do
     if y < variables.y then moveDown()
-    else moveUp()
+    else moveUp() end
+  end
 
 end
 

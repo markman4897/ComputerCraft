@@ -11,3 +11,4 @@ My APIs and programs for ComputerCraft
 - add help to APIs
 - add help to programs
 - move version from globalVariables.cfg to readme.md or startup (?) and update startup and init.lua
+- update move functions in ta.lua to have fail condition and return it

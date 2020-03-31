@@ -26,11 +26,11 @@ end
 
 function translate(input)
   if input == "north" then return {0,-1}
-  if input == "south" then return {0,1}
-  if input == "east" then return {1,0}
-  if input == "west" then return {-1,0}
-  if input == {0,-1} then return "north"
-  if input == {0,1} then return "south"
-  if input == {1,0} then return "east"
-  if input == {-1,0} then return "west"
+  elseif input == "south" then return {0,1}
+  elseif input == "east" then return {1,0}
+  elseif input == "west" then return {-1,0}
+  elseif input == {0,-1} then return "north"
+  elseif input == {0,1} then return "south"
+  elseif input == {1,0} then return "east"
+  elseif input == {-1,0} then return "west" end
 end
