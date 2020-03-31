@@ -19,11 +19,11 @@ local function uninstall()
       return false
     end
 
-    files = {"/startup",
-             "/globalVariables.cfg",
-             "/apis", -- folder
-             "/programs", -- folder
-             "/resume"}
+    files = {"startup",
+             "globalVariables.cfg",
+             "apis", -- folder
+             "programs", -- folder
+             "resume"}
 
     -- should I use ipairs here?
     for k,v in pairs(files) do

@@ -7,9 +7,9 @@
 
 local files = {
   "globalVariables.cfg",
-  "programs/mine.lua",
+  "programs/lumberjack.lua",
+  "programs/miner.lua",
   "programs/ref.lua",
-  "programs/treeChopper.lua",
   "apis/ca.lua",
   "apis/fv.lua",
   "apis/ta.lua"

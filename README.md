@@ -10,3 +10,4 @@ My APIs and programs for ComputerCraft
 - write short documentation here
 - add help to APIs
 - add help to programs
+- move version from globalVariables.cfg to readme.md or startup (?) and update startup and init.lua

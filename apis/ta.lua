@@ -7,6 +7,12 @@
 -- 1st slot: ender chest for depositing
 -- 1st slot: ender chest for fuel
 
+-- TODO::
+-- - prettify code like while not place, attack etc. to local functions and make
+--   a nonviolent option (wait instead of attack) for indoor use
+-- - add turnTo() function
+-- - add moveTo(x,y,z) function
+
 -- This is the API for most used general turtle commands
 
 local file = fs.open("globalVariables.cfg", "r")
@@ -14,6 +20,22 @@ variables = textutils.unserialise(file.readAll())
 file.close()
 os.loadAPI("/apis/fv.lua")
 variables = fv.read()
+
+-- Dig functions (placeholder for later)
+
+function dig()
+  turtle.dig()
+end
+
+function digUp()
+  turtle.digUp()
+end
+
+function digDown()
+  turtle.digDown()
+end
+
+-- Rotate functions
 
 function rotateLeft()
   turtle.turnLeft()
@@ -28,7 +50,17 @@ function rotateRight()
   fv.write({dirx=variables.dirx, dirz=variables.dirz})
 end
 
-function moveForwards()
+function turnTo(direction)
+  while {variables.dirx, variables.dirz} ~= fv.translate(direction) do
+    rotateLeft()
+  end
+end
+
+-- Move functions
+
+-- TODO:: make so they try for a certain time and then return false instead
+
+function moveForward()
   while not turtle.forward() do
     turtle.attack()
   end
@@ -38,7 +70,7 @@ function moveForwards()
   fv.write({x=variables.x, z=variables.z})
 end
 
-function moveBackwards()
+function moveBack()
   if not turtle.back() then
     turtle.turnLeft()
     turtle.turnLeft()
@@ -77,13 +109,39 @@ end
 
 function moveLeft()
   rotateLeft()
-  moveForwards()
+  moveForward()
 end
 
 function moveRight()
   rotateRight()
-  moveForwards()
+  moveForward()
 end
+
+function moveTo(x,y,z)
+  -- move on z axis
+  if z < variables.z then
+    turnTo("north")
+  else
+    turnTo("south")
+  while (not z == variables.z) do
+    if not moveForward() then moveUp()
+  end
+  -- move on x axis
+  if x < variables.x then
+    turnTo("west")
+  else
+    turnTo("east")
+  while (not x == variables.x) do
+    if not moveForward() then moveUp()
+  end
+  -- move on y axis
+  while (not y == variables.y) do
+    if y < variables.y then moveDown()
+    else moveUp()
+
+end
+
+-- Special functions
 
 function inv_full()
   for i=3,16 do
@@ -96,6 +154,8 @@ function inv_full()
   return true
 end
 
+-- TODO:: prettify to use fv.translate and keep original direction and then turn
+--        back
 function findSpaceAndPlace()
   while true do
     -- look forward for space
@@ -225,6 +285,7 @@ function deposit()
 
 end
 
+-- This will assume you have the right inventory placement!
 function refuel()
   turtle.select(2)
 
