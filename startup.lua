@@ -12,7 +12,13 @@ local tArgs = {...}
 -- found.
 
 local function uninstall()
-    -- TODO:: Add "Are you sure" dialog.
+    print("[INFO] Uninstallation commencing...")
+    print("Are you sure you want to uninstall the framework? (y/n)")
+    local temp = read()
+    if temp == "n" or temp == "N" or temp == "no" or temp == "No" or temp == "NO" then
+      return false
+    end
+
     files = {"/startup",
              "/globalVariables.cfg",
              "/apis", -- folder
@@ -25,6 +31,7 @@ local function uninstall()
       fs.delete(v)
     end
 
+    print("[INFO] Uninstallation completed.")
 end
 
 if tArgs[1] == "uninstall" then
@@ -33,9 +40,19 @@ if tArgs[1] == "uninstall" then
   return true
 end
 
+if tArgs[1] == "help" then
+  print("Available arguments:")
+  print("uninstall - uninstalls the framework and everything in it.")
+  print("reinstall - reinstalls fresh version of the framework.")
+  print("help - prints this information")
+
+  return true
+end
+
 if not fs.exists("globalVariables.cfg") then
   shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/init.lua", "init.lua")
   shell.run("init.lua")
+  print("[INFO] Installation complete.")
   fs.delete("init.lua")
 else
   shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/globalVariables.cfg", "temp")
@@ -47,10 +64,11 @@ else
   ver_f.close()
   fs.delete("temp")
   if (new_ver["version"] ~= ver["version"]) or (tArgs[1] == "reinstall") then
-    -- TODO: FIX THIS LOGICALLY SOMEHOW?
+    print("[INFO] Updating framework...")
     uninstall()
     shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
     shell.run("startup")
+    print("[INFO] Framework updated.")
   end
 end
 

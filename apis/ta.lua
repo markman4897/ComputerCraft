@@ -15,32 +15,72 @@ file.close()
 os.loadAPI("/apis/fv.lua")
 variables = fv.read()
 
+function rotateLeft()
+  turtle.rotateLeft()
+  variables["dirx"], variables["dirz"] = variables["dirz"], -variables["dirx"]
+
+end
+
+function rotateRight()
+  turtle.rotateRight
+  variables["dirx"], variables["dirz"] = -variables["dirz"], variables["dirx"]
+end
+
 function moveForwards()
   while not turtle.moveForwards() do
     turtle.attack()
   end
 
-  -- move in virtual grid and save to variables
+  variables["x"] = variables["x"] + variables["dirx"]
+  variables["z"] = variables["z"] + variables["dirz"]
+  fv.write({x=variables["x"], z=variables["z"]})
 end
 
 function moveBackwards()
-  --placeholder
+  if not turtle.moveBackwards() then
+    turtle.turnLeft()
+    turtle.turnLeft()
+
+    while not turtle.moveForwards() do
+      turtle.attack()
+    end
+
+    turtle.turnLeft()
+    turtle.turnLeft()
+
+  end
+
+  variables["x"] = variables["x"] + variables["dirx"]
+  variables["z"] = variables["z"] + variables["dirz"]
+  fv.write({x=variables["x"], z=variables["z"]})
 end
 
 function moveUp()
-  --placeholder
+  while not turtle.moveUp() do
+    turtle.attackUp()
+  end
+
+  variables["y"] = variables["y"] + 1
+  fv.write({y=variables["y"]})
 end
 
 function moveDown()
-  --placeholder
+  while not turtle.moveDown() do
+    turtle.attackDown()
+  end
+
+  variables["y"] = variables["y"] - 1
+  fv.write({y=variables["y"]})
 end
 
-function rotateLeft()
-  --placeholder
+function moveLeft()
+  rotateLeft()
+  moveForwards()
 end
 
-function rotateRight()
-  --placeholder
+function moveRight()
+  rotateRight()
+  moveForwards()
 end
 
 function inv_full()
