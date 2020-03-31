@@ -21,7 +21,7 @@ local function uninstall()
     for y,x in pairs(files) do
       -- should this be try() ? or pcall(func, arg) or whatever for extra safety?
       print("Deleting: "..x)
-      shell.run("fs.delete("..x..")")
+      fs.delete(x)
     end
 
 end
@@ -40,10 +40,12 @@ if not fs.exists("globalVariables.cfg") then
   fs.delete("init.lua")
 else
   shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/globalVariables.cfg", "temp")
-  local new_ver = textutils.unserialise(fs.open("temp", "r").readAll())
-  new_ver.close()
-  local ver = textutils.unserialise(fs.open("globalVariables.cfg", "r").readAll())
-  ver.close()
+  local new_ver_f = fs.open("temp", "r")
+  local new_ver = textutils.unserialise(new_ver_f.readAll())
+  new_ver_f.close()
+  local ver_f = fs.open("globalVariables.cfg", "r")
+  local ver = textutils.unserialise(ver_f.readAll())
+  ver_f.close()
   fs.delete("temp")
   if (new_ver["version"] ~= ver["version"]) or (tArgs[1] == "reinstall") then
     -- TODO: FIX THIS LOGICALLY SOMEHOW?
