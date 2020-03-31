@@ -52,7 +52,7 @@ end
 
 function turnTo(direction)
   local temp = fv.translate(direction)
-  while variables.dirx ~= temp[1] and variables.dirz ~= temp[2]  do
+  while variables.dirx ~= temp[1] or variables.dirz ~= temp[2]  do
     rotateLeft()
   end
 end
@@ -69,6 +69,8 @@ function moveForward()
   variables.x = variables.x + variables.dirx
   variables.z = variables.z + variables.dirz
   fv.write({x=variables.x, z=variables.z})
+
+  return true
 end
 
 function moveBack()
@@ -88,6 +90,8 @@ function moveBack()
   variables.x = variables.x + variables.dirx
   variables.z = variables.z + variables.dirz
   fv.write({x=variables.x, z=variables.z})
+
+  return true
 end
 
 function moveUp()
@@ -97,6 +101,8 @@ function moveUp()
 
   variables.y = variables.y + 1
   fv.write({y=variables.y})
+
+  return true
 end
 
 function moveDown()
@@ -106,26 +112,32 @@ function moveDown()
 
   variables.y = variables.y - 1
   fv.write({y=variables.y})
+
+  return true
 end
 
 function moveLeft()
   rotateLeft()
   moveForward()
+
+  return true
 end
 
 function moveRight()
   rotateRight()
   moveForward()
+
+  return true
 end
 
 function moveTo(x,y,z)
   -- move on z axis
   if z < variables.z then
     turnTo("north")
-  else
+  elseif z > variables.z then
     turnTo("south")
   end
-  while (not z == variables.z) do
+  while not (z == variables.z) do
     if not moveForward() then moveUp() end
   end
   -- move on x axis
@@ -134,11 +146,11 @@ function moveTo(x,y,z)
   else
     turnTo("east")
   end
-  while (not x == variables.x) do
+  while not (x == variables.x) do
     if not moveForward() then moveUp() end
   end
   -- move on y axis
-  while (not y == variables.y) do
+  while not (y == variables.y) do
     if y < variables.y then moveDown()
     else moveUp() end
   end
