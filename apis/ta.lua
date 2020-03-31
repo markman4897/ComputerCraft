@@ -63,7 +63,7 @@ end
 
 local function forward()
   for i=1,3 do
-    if not turtle.forward() do
+    if not turtle.forward() then
       if violent then
         turtle.attack()
         os.sleep(0.2)
@@ -94,7 +94,7 @@ end
 
 local function up()
   for i=1,3 do
-    if not turtle.up() do
+    if not turtle.up() then
       if violent then
         turtle.attackUp()
         os.sleep(0.2)
@@ -111,7 +111,7 @@ end
 
 local function down()
   for i=1,3 do
-    if not turtle.down() do
+    if not turtle.down() then
       if violent then
         turtle.attackDown()
         os.sleep(0.2)
