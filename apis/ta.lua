@@ -51,6 +51,7 @@ end
 -- Move functions
 
 local function forward()
+  if turtle.getFuelLevel() < 1 then refuel() end
   for i=1,5 do
     if not turtle.forward() then
       if violent then
@@ -82,6 +83,7 @@ local function back()
 end
 
 local function up()
+  if turtle.getFuelLevel() < 1 then refuel() end
   for i=1,5 do
     if not turtle.up() then
       if violent then
@@ -99,6 +101,7 @@ local function up()
 end
 
 local function down()
+  if turtle.getFuelLevel() < 1 then refuel() end
   for i=1,5 do
     if not turtle.down() then
       if violent then
@@ -207,18 +210,15 @@ end
 -- Dig functions
 
 function dig()
-  turtle.dig()
-  return moveForward()
+  return turtle.dig()
 end
 
 function digUp()
-  turtle.digUp()
-  return moveUp()
+  return turtle.digUp()
 end
 
 function digDown()
-  turtle.digDown()
-  return moveDown()
+  return turtle.digDown()
 end
 
 function digRight()

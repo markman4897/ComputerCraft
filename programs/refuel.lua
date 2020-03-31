@@ -11,3 +11,5 @@ turtle.refuel()
 turtle.select(4)
 turtle.refuel()
 turtle.select(1)
+
+print(turtle.getFuelLevel())
