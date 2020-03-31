@@ -33,8 +33,6 @@ if tArgs[1] == "uninstall" then
   return true
 end
 
-print("[INFO]: Got through uninstall.")
-
 if not fs.exists("globalVariables.cfg") then
   shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/init.lua", "init.lua")
   shell.run("init.lua")

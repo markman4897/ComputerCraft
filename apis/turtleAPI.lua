@@ -13,7 +13,11 @@ os.loadAPI("/apis/fv.lua")
 variables = fv.read()
 
 function moveForwards()
-  --placeholder
+  while ~turtle.moveForwards() do
+    turtle.attack()
+  end
+
+  -- move in virtual grid
 end
 
 function moveBackwards()
@@ -36,8 +40,15 @@ function rotateRight()
   --placeholder
 end
 
-function check_inv()
-  --placeholder
+function inv_full()
+  for i=3,16 do
+    turtle.select(i)
+    if turtle.getItemCount() == 0 then
+      return false
+    end
+  end
+
+  return true
 end
 
 function findSpaceAndPlace()
@@ -175,7 +186,7 @@ function refuel()
   if space == "left" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.dig()
@@ -183,7 +194,7 @@ function refuel()
   elseif space == "right" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.select(1)
@@ -192,7 +203,7 @@ function refuel()
   elseif space == "back" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.select(1)
@@ -202,7 +213,7 @@ function refuel()
   elseif space == "up" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suckUp(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.select(1)
@@ -210,7 +221,7 @@ function refuel()
   elseif space == "down" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suckDown(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.select(1)
@@ -218,7 +229,7 @@ function refuel()
   elseif space == "front" then
     while turtle.getFuelLevel() < 20000 do
       turtle.suck(64)
-      turtle.refuel()
+      turtle.refuel(64)
     end
 
     turtle.select(1)
