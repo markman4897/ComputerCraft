@@ -26,18 +26,19 @@ local targetz = 0
 -- Functions
 
 local function mine(area)
-  print(area)
+  print(textutils.serialise(area))
+  ta.moveTo(area.x2, area.y2, area.z2)
 end
 
 -- Main program
 
-if (#tArgs[] == 0) or (tArgs[1] == "help") then
+if (#tArgs == 0) or (tArgs[1] == "help") then
   print("Miner program.")
   print("usage: miner [length] [width] [depth]")
   print("length - forward, width - right, depth - down")
 
   return true
-elseif tArgs[1] == "resume"
+elseif tArgs[1] == "resume" then
   startx = variables.startx
   starty = variables.starty
   startz = variables.startz
@@ -46,9 +47,9 @@ elseif tArgs[1] == "resume"
   targety= variables.targety
   targetz = variables.targetz
 else
-  startx = variables.startx
-  starty = variables.starty
-  startz = variables.startz
+  startx = variables.x
+  starty = variables.y
+  startz = variables.z
 
   targetx = startx + tArgs[2]--width
   targety= starty - tArgs[3]--depth
