@@ -9,8 +9,10 @@ function read()
 end
 
 function write(inp)
-  local f = fs.open("globalVariables.cfg", "w")
+  local f = fs.open("globalVariables.cfg", "r")
   local temp = textutils.unserialise(f.readAll())
+  f.close() -- maybe unnecessary?
+  local f = fs.open("globalVariables.cfg", "w")
 
   for k,v in pairs(inp) do
     temp[k] = v
