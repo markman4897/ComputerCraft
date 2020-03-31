@@ -7,7 +7,7 @@
 -- Initialisation script to get all the files
 
 -- shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/startup.lua", "startup")
-shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/globalVariables.lua", "globalVariables.cfg")
+shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/globalVariables.cfg", "globalVariables.cfg")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/programs/mine.lua", "programs/mine.lua")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/programs/ref.lua", "programs/ref.lua")
 shell.run("wget", "https://raw.githubusercontent.com/markman4897/ComputerCraft/master/programs/treeChopper.lua", "programs/treeChopper.lua")
