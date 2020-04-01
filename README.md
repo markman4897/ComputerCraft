@@ -1,6 +1,9 @@
 # ComputerCraft
 My APIs and programs for ComputerCraft
 
+# Changelog:
+Changelog might be a bit unusual because to test the scripts I actually run them ingame which means that for most any change I have to push the code here and then download it via ingame means.
+
 
 ## ToDo:
 - make lumberjack program

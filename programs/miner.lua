@@ -127,7 +127,7 @@ local function mineLayer(layer)
 end
 
 local function mine(area)
-  local layer
+  local layer = {}
   if variables.finished or done then -- done is just unnecessary safety
     return returnToStart()
   end
@@ -146,7 +146,7 @@ local function mine(area)
     layer.down = true -- if we're on the bottom layer, don't mine down
   end
 
-  if starty - targety == 0 then layer.up = true end -- if we're digging 1 high hole, don't dig up
+  if ta.variables.y == starty then layer.up = true end -- no digging up on first layer
 
   dir = math.ceil((math.abs(starty - ta.variables.y)) / 3) % 2 == 1 -- can be merged down
 
@@ -194,22 +194,23 @@ if (#tArgs == 0) or (tArgs[1] == "help") then -- if program was not started with
   print("length - forward, width - right, depth - down")
 
   return true
-elseif tArgs[1] == "resume" then -- if program is resuming
+elseif (tArgs[1] == "resume") or fs.exists("resume") then -- if program is resuming
   startx = variables.sx
   starty = variables.sy
   startz = variables.sz
 
   targetx = variables.tx
-  targety= variables.ty
+  targety = variables.ty
   targetz = variables.tz
 else
   startx = variables.x
   starty = variables.y
   startz = variables.z
 
-  targetx = startx + tArgs[2]--width not right?! !!!!!!!!!! (goes left instead of right) (check ta movement separately!)
-  targety= starty - tArgs[3]--depth
-  targetz = startz - tArgs[1]--length
+  -- -1 because turtle is standing in the first block
+  targetx = startx + tArgs[2] - 1 --width
+  targety = starty - tArgs[3] - 1 --depth
+  targetz = startz - tArgs[1] - 1 --length
 
   fv.write({
     sx=startx,
