@@ -208,9 +208,9 @@ else
   startz = variables.z
 
   -- -1 because turtle is standing in the first block
-  targetx = startx + tArgs[2] - 1 --width
-  targety = starty - tArgs[3] - 1 --depth
-  targetz = startz - tArgs[1] - 1 --length
+  targetx = startx + (tArgs[2] - 1) --width
+  targety = starty - (tArgs[3] - 1) --depth
+  targetz = startz - (tArgs[1] - 1) --length
 
   fv.write({
     sx=startx,
