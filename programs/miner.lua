@@ -168,7 +168,7 @@ local function mine()
   end -- no digging up on first layer
 
   -- calculates the right direction
-  dir = math.ceil((math.abs(starty - ta.variables.y)) / 3) % 2 == 1
+  --dir = math.ceil((math.abs(starty - ta.variables.y)) / 3) % 2 == 1
 
   -- just not to skip the first down block of the layer
   if not flags.down then ta.digDown() end
