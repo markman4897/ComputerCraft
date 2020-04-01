@@ -47,6 +47,10 @@ if tArgs[1] == "uninstall" then
   uninstall()
 
   return true
+elseif tArgs[1] == "reinstall" then
+  update()
+
+  return true
 elseif tArgs[1] == "help" then
   print("Available arguments:")
   print("uninstall - uninstalls the framework and everything in it.")
@@ -70,7 +74,7 @@ else
   local ver = textutils.unserialise(ver_f.readAll())
   ver_f.close()
   fs.delete("temp")
-  if (tArgs[1] == "reinstall") or not (new_ver.version == ver.version) then
+  if not (new_ver.version == ver.version) then
     if not fs.exists("resume") then
       update()
       return true

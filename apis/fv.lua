@@ -9,13 +9,12 @@ function read()
   local temp = textutils.unserialise(file.readAll())
   file.close()
   return temp
-
 end
 
 function write(inp)
   local f = fs.open("globalVariables.cfg", "r")
   local temp = textutils.unserialise(f.readAll())
-  f.close() -- maybe unnecessary?
+  f.close() -- maybe unnecessary? or just good practise?
   local f = fs.open("globalVariables.cfg", "w")
 
   for k,v in pairs(inp) do
@@ -25,6 +24,23 @@ function write(inp)
   f.write(textutils.serialise(temp))
   f.close()
 
+  return true
+end
+
+function delete(inp)
+  local f = fs.open("globalVariables.cfg", "r")
+  local temp = textutils.unserialise(f.readAll())
+  f.close() -- maybe unnecessary? or just good practise?
+  local f = fs.open("globalVariables.cfg", "w")
+
+  for k,v in ipairs(inp) do
+    temp[v] = nil
+  end
+
+  f.write(textutils.serialise(temp))
+  f.close()
+
+  return true
 end
 
 function translate(input)

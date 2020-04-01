@@ -38,14 +38,14 @@ local dir = true -- turn to right = true (left = false)
 -- Deletes miner.lua specific variables in globalVariables.cfg and deletes
 -- resume.
 local function finish() -- technically could merge to start func somehow...
-  fv.write({
-    sx=nil,
-    sy=nil,
-    sz=nil,
-    tx=nil,
-    ty=nil,
-    tz=nil,
-    finished=nil
+  fv.delete({
+    "sx",
+    "sy",
+    "sz",
+    "tx",
+    "ty",
+    "tz",
+    "finished"
     })
 
   fs.delete("resume")
