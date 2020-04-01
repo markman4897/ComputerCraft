@@ -6,7 +6,7 @@
 -- for now ! ONLY WORKS ! if depth is a multiple of 3
 
 -- TODO:: - fix so it still works normal if it crashes when turning at the end of
---          the row
+--          the row... actually idunno man...
 
 -- APIs
 
@@ -107,6 +107,7 @@ local function mineLayer(layer)
     if not mineStep(layer.down, layer.up) then
       if not turn(layer.down, layer.up) then
         if layer.down then -- if this was the last layer, lets stop
+          print("FINISHED!!!")
           variables.finished = true
           fv.write({finished=true})
           return true
@@ -137,7 +138,7 @@ local function mine(area)
   layer.up = false
 
   -- get into the right height to run mineLayer()
-  if ta.variables.y+1 > targety then -- super not sure if this "+1" will work or not
+  if ta.variables.y >= targety then
     while not ((math.abs(starty - ta.variables.y) - 1) % 3) == 0 do -- checks if the turtle is in the right position to mine
       ta.digDown()
       ta.moveDown()
@@ -157,7 +158,7 @@ local function mine(area)
     z2=area.z2
   }
 
-  if not layer.down then ta.digDown() end
+  if not layer.down then ta.digDown() end -- just not to skip the first down block of the layer
   mineLayer(layer)
 
   return false -- hopefully this doesn't break anything
@@ -179,7 +180,6 @@ local function start()
   file.close()
 
   while not done do
-    print("area: "..textutils.serialise(area))
     mine(area)
   end
 

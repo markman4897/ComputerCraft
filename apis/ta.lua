@@ -238,12 +238,21 @@ end
 
 -- Special functions
 
-function inv_full()
+function check_inv_full()
   for i=3,16 do
     turtle.select(i)
     if turtle.getItemCount() == 0 then
       return false
     end
+  end
+
+  return true
+end
+
+function quick_inv_full()
+  turtle.select(16)
+  if turtle.getItemCount() == 0 then
+    return false
   end
 
   return true
@@ -281,7 +290,7 @@ function findSpaceAndPlace()
     end
 
     -- look left for space
-    turnLeft()
+    rotateLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -291,7 +300,7 @@ function findSpaceAndPlace()
     end
 
     -- look Back for space
-    turnLeft()
+    rotateLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -301,7 +310,7 @@ function findSpaceAndPlace()
     end
 
     -- look Right for space
-    turnLeft()
+    rotateLeft()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -328,7 +337,7 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turnRight()
+    rotateRight()
 
   elseif space == "right" then
     for i=2,16 do
@@ -338,7 +347,7 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turnLeft()
+    rotateLeft()
 
   elseif space == "back" then
     for i=2,16 do
@@ -348,8 +357,8 @@ function deposit()
 
     turtle.select(1)
     turtle.dig()
-    turnLeft()
-    turnLeft()
+    rotateLeft()
+    rotateLeft()
   elseif space == "up" then
     for i=2,16 do
       turtle.select(i)
@@ -393,7 +402,7 @@ function refuel()
     end
 
     turtle.dig()
-    turnRight()
+    rotateRight()
   elseif space == "right" then
     while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
@@ -402,7 +411,7 @@ function refuel()
 
     turtle.select(1)
     turtle.dig()
-    turnLeft()
+    rotateLeft()
   elseif space == "back" then
     while turtle.getFuelLevel() < fuelCap do
       turtle.suck(64)
@@ -411,8 +420,8 @@ function refuel()
 
     turtle.select(1)
     turtle.dig()
-    turnLeft()
-    turnLeft()
+    rotateLeft()
+    rotateLeft()
   elseif space == "up" then
     while turtle.getFuelLevel() < fuelCap do
       turtle.suckUp(64)
