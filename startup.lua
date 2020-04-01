@@ -1,13 +1,13 @@
 --CC
 
--- Startup script to make (download) environment on the first run and to
--- properly run every consecutive time
+-- Startup script to download framework on the first run and to properly run
+-- every consecutive time.
 
 -- This script is installed by https://pastebin.com/VLTuFN08
 
 local tArgs = {...}
 
--- Check if system has initialised, otherwise, do it now.
+-- Checks if system has initialised, otherwise, does it now.
 -- If its initialised, checks for updates and updates the system if new version
 -- found.
 
@@ -71,7 +71,12 @@ else
   ver_f.close()
   fs.delete("temp")
   if (tArgs[1] == "reinstall") or not (new_ver.version == ver.version) then
-    if not fs.exists("resume") then update() else print("[WARN] Will update on next boot. Program is running.") end
+    if not fs.exists("resume") then
+      update()
+      return true
+    else
+      print("[WARN] Will update on next boot. Program is running.")
+    end
   end
 end
 
