@@ -44,7 +44,7 @@ end
 function turnTo(direction)
   local temp = fv.translate(direction)
   while variables.dirx ~= temp[1] or variables.dirz ~= temp[2]  do
-    rotateLeft()
+    rotateRight()
   end
 end
 

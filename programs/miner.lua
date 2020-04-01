@@ -5,8 +5,10 @@
 -- This program runs most efficiently if depth is a multiple of 3.
 -- for now ! ONLY WORKS ! if depth is a multiple of 3
 
--- TODO:: - fix so it still works normal if it crashes when turning at the end of
---          the row... actually idunno man...
+-- TODO:: - fix so it still works normal if it crashes when turning at the end
+--          of the row... actually idunno man...
+--        - make an argument check so it can dispose of material into chest
+--          placed on top of it on start (or preselected coordinates if need be)
 
 -- APIs
 
@@ -28,13 +30,14 @@ local targety = 0
 local targetz = 0
 
 local done = false
-local dir = true -- do you work to right = true (left = false)
+local dir = true -- turn to right = true (left = false)
+-- dir gets calculated, so it doesnt matter what it is here
 
 -- Functions
 
 -- Deletes miner.lua specific variables in globalVariables.cfg and deletes
 -- resume.
-local function finish()
+local function finish() -- technically could merge to start func somehow...
   fv.write({
     sx=nil,
     sy=nil,
@@ -52,10 +55,10 @@ local function finish()
   return true
 end
 
--- after hitting last block
+-- after hitting last block we run this
 local function returnToStart()
   fv.write({finished=true}) -- should be unnecessary
-  ta.moveTo(startx,starty,startz)
+  ta.moveTo(startx,starty,startz) -- maybe make so it also orients the same?
   return finish()
 end
 
@@ -72,29 +75,27 @@ local function checkNextStep()
   return true -- neither boundary would be crossed
 end
 
-local function mineStep(down, up)
-  down = down or false
-  up = up or false
-  if not checkNextStep() then return false end -- if you can't make another step return false
+local function mineStep(flags)
+  if not checkNextStep() then
+    return false
+  end -- if you can't make another step return false
 
   ta.dig()
   ta.moveForward()
-  if not up then ta.digUp() end
-  if not down then ta.digDown() end
+  if not flags.up then ta.digUp() end
+  if not flags.down then ta.digDown() end
   return true
 end
 
-local function turn(down, up)
-  down = down or false
-  up = up or false
+local function turn(flags)
   if dir then
     ta.rotateRight()
-    if not mineStep(down, up) then return false end
+    if not mineStep(flags) then return false end
     ta.rotateRight()
     dir = not dir
   else
     ta.rotateLeft()
-    if not mineStep(down, up) then return false end
+    if not mineStep(flags) then return false end
     ta.rotateLeft()
     dir = not dir
   end
@@ -102,11 +103,11 @@ local function turn(down, up)
   return true
 end
 
-local function mineLayer(layer)
+local function mineLayer(flags)
   while true do
-    if not mineStep(layer.down, layer.up) then
-      if not turn(layer.down, layer.up) then
-        if layer.down then -- if this was the last layer, lets stop
+    if not mineStep(flags) then
+      if not turn(flags) then
+        if flags.down then -- if this was the last layer, lets stop
           print("FINISHED!!!")
           variables.finished = true
           fv.write({finished=true})
@@ -127,60 +128,62 @@ local function mineLayer(layer)
   end
 end
 
-local function mine(area)
-  local layer = {}
+-- are we are not on last layer? (with failsafe so it even works if we are too deep)
+local function isItFinalLayer()
+  return not (math.abs(targety - ta.variables.y) > 0)
+end
+
+local function mine()
+  -- reset for recalculation
+  local flags = {
+    down=false,
+    up=false
+  }
   if variables.finished or done then -- done is just unnecessary safety
     return returnToStart() -- only time this actually returns, it should be true
   end
 
-  -- reset for recalculation
-  layer.down = false
-  layer.up = false
-
-  -- get into the right height to run mineLayer()
-  if ta.variables.y >= targety then
-    while not ((math.abs(starty - ta.variables.y) - 1) % 3) == 0 do -- checks if the turtle is in the right position to mine
+  -- get into the right height to run mineLayer() (how is this so hard!!!)
+  if isItFinalLayer() then
+    print("i've run down true!")
+    flags.down = true -- if we're on the bottom layer, don't mine down
+  else
+    -- checks if the turtle is in the right position to mine (so we can break
+    -- front, up and down)
+    while not (((math.abs(starty - ta.variables.y) + 2) % 3) == 0) do
       ta.digDown()
       ta.moveDown()
+      if isItFinalLayer() then
+        print("i've run down true!")
+        flags.down = true -- if we're on the bottom layer, don't mine down
+        break
+      end
     end
-  else
-    layer.down = true -- if we're on the bottom layer, don't mine down
   end
 
-  if ta.variables.y == starty then layer.up = true end -- no digging up on first layer
+  -- if we're digging 1 deep hole so we don't dig up
+  if ta.variables.y == starty then
+    print("i've run up true!")
+    flags.up = true
+  end -- no digging up on first layer
 
-  dir = math.ceil((math.abs(starty - ta.variables.y)) / 3) % 2 == 1 -- can be merged down
+  -- calculates the right direction
+  dir = math.ceil((math.abs(starty - ta.variables.y)) / 3) % 2 == 1
 
-  layer = { -- could just use startx targetx etc instead
-    x1=area.x1,
-    x2=area.x2,
-    z1=area.z1,
-    z2=area.z2
-  }
+  -- just not to skip the first down block of the layer
+  if not flags.down then ta.digDown() end
+  mineLayer(flags)
 
-  if not layer.down then ta.digDown() end -- just not to skip the first down block of the layer
-  mineLayer(layer)
-
-  return false -- hopefully this doesn't break anything
+  return false
 end
 
 local function start()
-  -- could move this directly into mine down below... nicer to read this way
-  local area = {
-    x1 = startx,
-    y1 = starty,
-    z1 = startz,
-    x2 = targetx,
-    y2 = targety,
-    z2 = targetz
-  }
-
   local file = fs.open("resume", "w")
   file.write("shell.run('programs/miner.lua', 'resume')")
   file.close()
 
   while not done do
-    mine(area)
+    mine()
   end
 
   print("Finished mining. Over and out.")
