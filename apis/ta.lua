@@ -439,7 +439,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.dropUp(itemCount)
+    if itemCount > 0 then turtle.dropUp(itemCount) end
 
     turtle.digUp()
   elseif space == "down" then
@@ -449,7 +449,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.dropDown(itemCount)
+    if itemCount > 0 then turtle.dropDown(itemCount) end
 
     turtle.digDown()
   elseif space == "front" then
