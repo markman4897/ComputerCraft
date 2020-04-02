@@ -405,7 +405,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.drop(itemCount)
+    if itemCount > 0 then turtle.drop(itemCount) end
 
     turtle.dig()
     rotateRight()
@@ -416,7 +416,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.drop(itemCount)
+    if itemCount > 0 then turtle.drop(itemCount) end
 
     turtle.dig()
     rotateLeft()
@@ -427,7 +427,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.drop(itemCount)
+    if itemCount > 0 then turtle.drop(itemCount) end
 
     turtle.dig()
     rotateLeft()
@@ -459,8 +459,7 @@ function refuel()
     end
 
     local itemCount = turtle.getItemCount()
-    if itemCount > 0 then turtle.drop(itemCount)
-
+    if itemCount > 0 then turtle.drop(itemCount) end
     turtle.dig()
   else
     print("Problem with findSpaceAndPlace() output in function refuel()")
