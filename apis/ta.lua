@@ -340,7 +340,7 @@ function deposit()
   local space = findSpaceAndPlace()
 
   if space == "left" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -350,7 +350,7 @@ function deposit()
     rotateRight()
 
   elseif space == "right" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -360,7 +360,7 @@ function deposit()
     rotateLeft()
 
   elseif space == "back" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -370,7 +370,7 @@ function deposit()
     rotateLeft()
     rotateLeft()
   elseif space == "up" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.dropUp(turtle.getItemCount())
     end
@@ -378,7 +378,7 @@ function deposit()
     turtle.select(1)
     turtle.digUp()
   elseif space == "down" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.dropDown(turtle.getItemCount())
     end
@@ -386,7 +386,7 @@ function deposit()
     turtle.select(1)
     turtle.digDown()
   elseif space == "front" then
-    for i=2,16 do
+    for i=3,16 do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
