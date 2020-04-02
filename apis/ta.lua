@@ -210,14 +210,17 @@ end
 -- Dig functions
 
 function dig()
+  if quick_check_inv_full() then deposit() end
   return turtle.dig()
 end
 
 function digUp()
+  if quick_check_inv_full() then deposit() end
   return turtle.digUp()
 end
 
 function digDown()
+  if quick_check_inv_full() then deposit() end
   return turtle.digDown()
 end
 
@@ -249,7 +252,7 @@ function check_inv_full()
   return true
 end
 
-function quick_inv_full()
+function quick_check_inv_full()
   turtle.select(16)
   if turtle.getItemCount() == 0 then
     return false
@@ -401,6 +404,9 @@ function refuel()
       turtle.refuel(64)
     end
 
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.drop(itemCount)
+
     turtle.dig()
     rotateRight()
   elseif space == "right" then
@@ -409,7 +415,9 @@ function refuel()
       turtle.refuel(64)
     end
 
-    turtle.select(1)
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.drop(itemCount)
+
     turtle.dig()
     rotateLeft()
   elseif space == "back" then
@@ -418,7 +426,9 @@ function refuel()
       turtle.refuel(64)
     end
 
-    turtle.select(1)
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.drop(itemCount)
+
     turtle.dig()
     rotateLeft()
     rotateLeft()
@@ -428,7 +438,9 @@ function refuel()
       turtle.refuel(64)
     end
 
-    turtle.select(1)
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.dropUp(itemCount)
+
     turtle.digUp()
   elseif space == "down" then
     while turtle.getFuelLevel() < fuelCap do
@@ -436,7 +448,9 @@ function refuel()
       turtle.refuel(64)
     end
 
-    turtle.select(1)
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.dropDown(itemCount)
+
     turtle.digDown()
   elseif space == "front" then
     while turtle.getFuelLevel() < fuelCap do
@@ -444,10 +458,15 @@ function refuel()
       turtle.refuel(64)
     end
 
-    turtle.select(1)
+    local itemCount = turtle.getItemCount()
+    if itemCount > 0 then turtle.drop(itemCount)
+
     turtle.dig()
   else
     print("Problem with findSpaceAndPlace() output in function refuel()")
   end
+
+  -- to reset cursor position
+  turtle.select(1)
 
 end

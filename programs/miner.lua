@@ -3,12 +3,13 @@
 -- This is a miner program, designed to excavate large (or small) areas and
 -- survive restarts.
 -- This program runs most efficiently if depth is a multiple of 3.
--- for now ! ONLY WORKS ! if depth is a multiple of 3
+-- THIS PROGRAM IS NOT YET PERSISTENT!!!
 
 -- TODO:: - fix so it still works normal if it crashes when turning at the end
 --          of the row... actually idunno man...
 --        - make an argument check so it can dispose of material into chest
 --          placed on top of it on start (or preselected coordinates if need be)
+--        - rewrite it so it really is persistent!
 
 -- APIs
 
@@ -210,7 +211,10 @@ else
   starty = variables.y
   startz = variables.z
 
-  -- -1 because turtle is standing in the first block
+-- FIX:: make so it is conscious how its rotated in the begining and then fill
+--       width and length appropriately!!!
+
+  -- -1 because turtle is standing in the first block (good when facing north)
   targetx = startx + (tArgs[2] - 1) --width
   targety = starty - (tArgs[3] - 1) --depth
   targetz = startz - (tArgs[1] - 1) --length
