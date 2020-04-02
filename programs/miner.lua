@@ -59,6 +59,7 @@ end
 -- after hitting last block we run this
 local function returnToStart()
   fv.write({finished=true}) -- should be unnecessary
+  ta.deposit() -- deposit remainder of stuff
   ta.moveTo(startx,starty,startz) -- maybe make so it also orients the same?
   return finish()
 end
