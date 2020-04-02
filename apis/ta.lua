@@ -265,15 +265,6 @@ end
 --        back
 function findSpaceAndPlace()
   while true do
-    -- look forward for space
-    if not turtle.detect() then
-      while not turtle.place() do
-        turtle.attack()
-      end
-
-      return "front"
-    end
-
     -- look up for space
     if not turtle.detectUp() then
       while not turtle.placeUp() do
@@ -283,10 +274,10 @@ function findSpaceAndPlace()
       return "up"
     end
 
-    -- look down for space
-    if not turtle.detectDown() then
-      while not turtle.placeDown() do
-        turtle.attackDown()
+    -- look forward for space
+    if not turtle.detect() then
+      while not turtle.place() do
+        turtle.attack()
       end
 
       return "down"
@@ -297,6 +288,15 @@ function findSpaceAndPlace()
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
+      end
+
+      return "front"
+    end
+
+    -- look down for space
+    if not turtle.detectDown() then
+      while not turtle.placeDown() do
+        turtle.attackDown()
       end
 
       return "left"
