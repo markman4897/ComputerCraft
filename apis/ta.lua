@@ -211,16 +211,19 @@ end
 
 function dig()
   if quick_check_inv_full() then deposit() end
+  turtle.select(1)
   return turtle.dig()
 end
 
 function digUp()
   if quick_check_inv_full() then deposit() end
+  turtle.select(1)
   return turtle.digUp()
 end
 
 function digDown()
   if quick_check_inv_full() then deposit() end
+  turtle.select(1)
   return turtle.digDown()
 end
 
@@ -249,6 +252,8 @@ function check_inv_full()
     end
   end
 
+  turtle.select(1)
+
   return true
 end
 
@@ -257,6 +262,8 @@ function quick_check_inv_full()
   if turtle.getItemCount() == 0 then
     return false
   end
+
+  turtle.select(1)
 
   return true
 end
