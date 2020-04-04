@@ -1,6 +1,6 @@
 --CC
 
--- program to quickly refuel from first four slots
+-- makeshift program to quickly refuel from first four slots
 
 turtle.select(1)
 turtle.refuel()

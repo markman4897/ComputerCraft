@@ -1,27 +1,60 @@
 --CC
 
--- TURTLE API (ta)
+--[[
+=====================
+ TURTLE API (1.0.0)
+=====================
+made by markman4897
 
--- IMPORTANT!!!
--- This library predicts that you have in your turtle inventory:
--- 1st slot: ender chest for depositing
--- 1st slot: ender chest for fuel
+ ~ This API is made to be the backbone for most all turtle programs
 
--- TODO::
--- - prettify code like while not place, attack etc. to local functions and make
---   a nonviolent option (wait instead of attack) for indoor use
+Setup for inventory:
+ - [1] slot: Ender chest for depositing
+ - [2] slot: Ender chest for fuel (hard fuels like coal, charcoal, blaze rods..)
 
--- This is the API for most used general turtle commands
+How to use:
+ - Consult the code, functions are very basic or self explanatory
 
--- Variables
-os.loadAPI("apis/fv.lua")
+Comments:
+ -
+
+TODO:
+ - make logs and make them print only if logs are enabled (use ga.lua!)
+ - make refuel and deposit functions an extension of findSpaceAndPlace somehow
+ - make so that functions take optional arguments for repetition
+
+--]]
+
+-- ========
+--   APIs
+-- ========
+
+os.loadAPI(".apis/fv.lua")
+
+
+-- =============
+--   Variables
+-- =============
+
 variables = fv.read()
 
 fuelCap = turtle.getFuelLimit()
 
-violent = true
+violent = true -- does it attack or does it wait if it cant move
 
--- Rotate functions
+-- does it force direction to deposit and refuel
+force = {}
+force.up = false
+force.down = false
+-- #? WILL THIS BE AFFECTED WHEN IT GETS CHANGED FROM OTHER PROGRAMS?
+-- and how will this be handled on restarts? (should be coded into programs)
+
+-- if you want functions to display logs or not
+logs = false -- not yet implemented
+
+-- ====================
+--   Rotate functions
+-- ====================
 
 function rotateLeft()
   turtle.turnLeft()
@@ -48,7 +81,9 @@ function turnTo(direction)
   end
 end
 
--- Move functions
+-- ==================
+--   Move functions
+-- ==================
 
 local function forward()
   if turtle.getFuelLevel() < 1 then refuel() end
@@ -72,7 +107,7 @@ local function back()
   if not turtle.back() then
     turtle.turnLeft()
     turtle.turnLeft()
-    local temp = forward() -- should this be local?
+    local temp = forward()
 
     turtle.turnLeft()
     turtle.turnLeft()
@@ -166,14 +201,14 @@ function moveDown()
   end
 end
 
--- if this returns false it still rotated!!
+-- #! if this returns false it still rotated!!
 function moveLeft()
   rotateLeft()
 
   return moveForward()
 end
 
--- if this returns false it still rotated!!
+-- #! if this returns false it still rotated!!
 function moveRight()
   rotateRight()
 
@@ -207,24 +242,53 @@ function moveTo(x,y,z)
 
 end
 
--- Dig functions
+-- =================
+--   Dig functions
+-- =================
 
-function dig()
+function dig() -- make it so it can handle gravel and sand and other falling blocks
   if quick_check_inv_full() then deposit() end
-  turtle.select(1)
-  return turtle.dig()
+
+  if turtle.detect() then
+    turtle.dig() -- because if detect we know there is a block
+    while turtle.detect() do -- if there is gravity blocks
+      turtle.dig()
+    end
+
+    return true
+  else
+    return false
+  end
 end
 
 function digUp()
   if quick_check_inv_full() then deposit() end
-  turtle.select(1)
-  return turtle.digUp()
+
+  if turtle.detectUp() then
+    turtle.digUp()
+    while turtle.detectUp() do
+      turtle.digUp()
+    end
+
+    return true
+  else
+    return false
+  end
 end
 
 function digDown()
   if quick_check_inv_full() then deposit() end
-  turtle.select(1)
-  return turtle.digDown()
+
+  if turtle.detectDown() then
+    turtle.digDown()
+    while turtle.detectDown() do -- #! this might be totally pointless but hey
+      turtle.digDown()
+    end
+
+    return true
+  else
+    return false
+  end
 end
 
 function digRight()
@@ -242,7 +306,18 @@ function digBack()
   return dig()
 end
 
--- Special functions
+-- =====================
+--   Special functions
+-- =====================
+
+function placeDir(direction) -- maybe this will get handy in the future
+  print("im a place function")
+end
+
+-- maybe call it dig(direction) instead?
+function digDir(direction) -- maybe this will get handy in the future
+  print("im a break function")
+end
 
 function check_inv_full()
   for i=3,16 do
@@ -260,6 +335,7 @@ end
 function quick_check_inv_full()
   turtle.select(16)
   if turtle.getItemCount() == 0 then
+    turtle.select(1)
     return false
   end
 
@@ -268,8 +344,11 @@ function quick_check_inv_full()
   return true
 end
 
--- TODO:: prettify to use fv.translate and keep original direction and then turn
---        back
+-- TODO:: - prettify to use fv.translate and keep original direction and then
+--          turn back
+--        - maybe make it just findSpace... and make place separate where it
+--          recieves function as an argument on what to do then
+--        - then make it so this function rotates back how it was originally
 function findSpaceAndPlace()
   while true do
     -- look up for space
@@ -281,17 +360,16 @@ function findSpaceAndPlace()
       return "up"
     end
 
-    -- look forward for space
-    if not turtle.detect() then
-      while not turtle.place() do
-        turtle.attack()
+    -- look down for space
+    if not turtle.detectDown() then
+      while not turtle.placeDown() do
+        turtle.attackDown()
       end
 
       return "down"
     end
 
-    -- look left for space
-    rotateLeft()
+    -- look forward for space
     if not turtle.detect() then
       while not turtle.place() do
         turtle.attack()
@@ -300,10 +378,11 @@ function findSpaceAndPlace()
       return "front"
     end
 
-    -- look down for space
-    if not turtle.detectDown() then
-      while not turtle.placeDown() do
-        turtle.attackDown()
+    -- look left for space
+    rotateLeft()
+    if not turtle.detect() then
+      while not turtle.place() do
+        turtle.attack()
       end
 
       return "left"
@@ -335,9 +414,36 @@ end
 
 -- This will assume you have the right inventory placement!
 function deposit()
-  turtle.select(1)
+  local space = "" -- initialise variable, might not be needed
 
-  local space = findSpaceAndPlace()
+  if force.up then
+    while not turtle.placeUp() do
+      if violent then
+        turtle.attackUp()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+      turtle.digUp() -- might waste 1 resource block...
+    end
+
+    space = "up"
+
+  elseif force.down then
+    while not turtle.placeDown() do
+      if violent then
+        turtle.attackDown()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+      turtle.digDown() -- might waste 1 resource block...
+    end
+
+    space = "down"
+  else
+    space = findSpaceAndPlace()
+  end
 
   if space == "left" then
     for i=3,16 do
@@ -345,7 +451,7 @@ function deposit()
       turtle.drop(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.dig()
     rotateRight()
 
@@ -355,7 +461,7 @@ function deposit()
       turtle.drop(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.dig()
     rotateLeft()
 
@@ -365,7 +471,7 @@ function deposit()
       turtle.drop(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.dig()
     rotateLeft()
     rotateLeft()
@@ -375,7 +481,7 @@ function deposit()
       turtle.dropUp(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.digUp()
   elseif space == "down" then
     for i=3,16 do
@@ -383,7 +489,7 @@ function deposit()
       turtle.dropDown(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.digDown()
   elseif space == "front" then
     for i=3,16 do
@@ -391,7 +497,7 @@ function deposit()
       turtle.drop(turtle.getItemCount())
     end
 
-    turtle.select(1)
+    turtle.select(1) -- to reset cursor position
     turtle.dig()
   else
     print("Problem with findSpaceAndPlace() output in function deposit()")
@@ -401,9 +507,39 @@ end
 
 -- This will assume you have the right inventory placement!
 function refuel()
+  local space = "" -- initialise variable, might not be needed
   turtle.select(2)
 
-  local space = findSpaceAndPlace()
+  if force.up then
+    while not turtle.placeUp() do
+      if violent then
+        turtle.attackUp()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+      turtle.digUp() -- might waste 1 resource block...
+    end
+
+    space = "up"
+
+  elseif force.down then
+    while not turtle.placeDown() do
+      if violent then
+        turtle.attackDown()
+        os.sleep(0.2)
+      else
+        os.sleep(0.5)
+      end
+      turtle.digDown() -- might waste 1 resource block...
+    end
+
+    space = "down"
+  else
+    space = findSpaceAndPlace()
+  end
+
+  turtle.select(2)
 
   if space == "left" then
     while turtle.getFuelLevel() < fuelCap do
@@ -476,3 +612,6 @@ function refuel()
   turtle.select(1)
 
 end
+
+-- reset cursor just in case...
+turtle.select(1) -- not sure if this helps, but it sure can't hurt

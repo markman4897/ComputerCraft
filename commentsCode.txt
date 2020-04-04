@@ -1,0 +1,66 @@
+This file contains the general rules about how I write comments (more or less)
+
+
+_________________
+Special hashtags:
+
+#?      means I need to check that (am not sure if it works as I intended)
+#!      means it is a problem and might cause problems in the future
+FIX::   means I need to fix this asap
+TODO::  means I just remembered something I can do and is relevant to the
+        the position in the program
+
+
+_________________
+Starting comment:
+
+--[[
+=================================
+ NAME OF THE PROGRAM (version)
+=================================
+made by markman4897
+
+ ~ Short description of the program
+
+Setup for inventory: (if its a turtle program)
+ - [1] slot:
+ - [2] slot:
+
+Arguments:
+ - <required argument> description
+ - [optional argument] description
+
+How to use:
+ -
+
+Comments:
+ -
+
+TODO:
+ -
+
+--]]
+
+
+________________
+Bigger comments:
+
+(before APIs)
+-- ========
+--   APIs
+-- ========
+
+(before variables)
+-- =============
+--   Variables
+-- =============
+
+(before every function set)
+-- =====================
+--   Type of functions
+-- =====================
+
+(before main program)
+-- ================
+--   Main program
+-- ================
