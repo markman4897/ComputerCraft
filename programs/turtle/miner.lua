@@ -30,11 +30,14 @@ Comments:
  - this program is not yet truly persistent!
 
 TODO:
+ - make it so when it resumes, it checks if the chest is missing and mines it
+   from above!
  - fix so it still works normal if it crashes when turning at the end
    of the row... actually idunno man...
  - make an argument check so it can dispose of material into chest
    placed on top of it on start (or preselected coordinates if need be)
  - rewrite it so it really is persistent!
+ - make another tag for turning and depositing and refueling
 
 --]]
 
@@ -44,7 +47,6 @@ TODO:
 -- ========
 
 os.loadAPI(".apis/ta.lua")
-os.loadAPI(".apis/fv.lua") -- only use translate function from here
 
 
 -- =============
@@ -54,7 +56,7 @@ os.loadAPI(".apis/fv.lua") -- only use translate function from here
 local tArgs = {...}
 
 -- watch out! NOT used for coordinates while running
-variables = fv.read()
+variables = fv.read() -- wait, how does this work now?
 
 -- force to deposit and refuel from above (not good for 1 high layers)
 ta.force.up = true
@@ -67,6 +69,8 @@ local targetx = 0
 local targety = 0
 local targetz = 0
 
+local refueling = false
+local depositing = false
 local done = false
 local dir = true -- turn to right = true (left = false)
 -- dir gets calculated, so it doesnt matter what it is here
@@ -232,6 +236,7 @@ local function start()
   print("Finished mining. Over and out.")
 end
 
+
 -- ================
 --   Main program
 -- ================
@@ -250,6 +255,19 @@ elseif (tArgs[1] == "resume") or fs.exists("resume") then -- if program is resum
   targetx = variables.tx
   targety = variables.ty
   targetz = variables.tz
+
+  -- if turtle got interrupted while refueling or depositing, finish it
+  if refueling then
+    turtle.select(2)
+    ta.digUp()
+    ta.refuel()
+    refueling = false
+  elseif depositing then
+    turtle.select(1)
+    ta.digUp()
+    ta.deposit()
+    depositing = false
+  end
 else
   startx = variables.x
   starty = variables.y
@@ -275,14 +293,11 @@ else
 end
 
 -- check if the ender chests are in place
-for i=1,2 do
-  turtle.select(i)
-  if turtle.getItemCount() == 0 then
-    print("You forgot to insert ender chests!")
-    return false
-  end
-end
+if not ta.checkInvSetup() then return false end
 
 turtle.select(1)
 
+local numOfBlocks = math.abs(targetx-startx)*math.abs(targety-starty)*math.abs(targetz-startz)
+local time = math.ceil((numOfBlocks * 0.71 )/60)
+print("[INFO] It's gonna take approximately ", time, " minutes.")
 start()

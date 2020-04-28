@@ -64,3 +64,10 @@ local function getDeviceType()
     return "computer"
   end
 end
+
+
+-- ================
+--   Main program
+-- ================
+
+deviceType = getDeviceType()

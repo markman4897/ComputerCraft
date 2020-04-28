@@ -23,7 +23,7 @@ Comments:
  -
 
 TODO:
- - figure out where to move the translate function to
+ -
 
 --]]
 
@@ -69,15 +69,4 @@ function delete(inp)
   f.close()
 
   return true
-end
-
-function translate(input)
-  if input == "north" then return {0,-1}
-  elseif input == "south" then return {0,1}
-  elseif input == "east" then return {1,0}
-  elseif input == "west" then return {-1,0}
-  elseif input[1] == 0 and input[2] == -1 then return "north"
-  elseif input[1] == 0 and input[2] == 1 then return "south"
-  elseif input[1] == 1 and input[2] == 0 then return "east"
-  elseif input[1] == -1 and input[2] == 0 then return "west" end
 end

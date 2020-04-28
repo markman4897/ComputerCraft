@@ -16,7 +16,8 @@ How to use:
  - Consult the code, functions are very basic or self explanatory
 
 Comments:
- -
+ - Programs using this should specify if they don't want the turtle to attack
+   when trying to move (be non violent)
 
 TODO:
  - make logs and make them print only if logs are enabled (use ga.lua!)
@@ -41,13 +42,18 @@ variables = fv.read()
 fuelCap = turtle.getFuelLimit()
 
 violent = true -- does it attack or does it wait if it cant move
+-- i dont think this works the way it should?
 
 -- does it force direction to deposit and refuel
 force = {}
 force.up = false
 force.down = false
--- #? WILL THIS BE AFFECTED WHEN IT GETS CHANGED FROM OTHER PROGRAMS?
+-- #? WILL THIS BE AFFECTED WHEN IT GETS CHANGED FROM OTHER PROGRAMS? - no?
 -- and how will this be handled on restarts? (should be coded into programs)
+
+-- from where to where does the turtle deposit stuff
+start = 3
+stop = 16
 
 -- if you want functions to display logs or not
 logs = false -- not yet implemented
@@ -75,7 +81,7 @@ function rotateBack()
 end
 
 function turnTo(direction)
-  local temp = fv.translate(direction)
+  local temp = translate(direction)
   while variables.dirx ~= temp[1] or variables.dirz ~= temp[2]  do
     rotateRight()
   end
@@ -201,6 +207,7 @@ function moveDown()
   end
 end
 
+-- #! if I fix this, should update miner.lua too!
 -- #! if this returns false it still rotated!!
 function moveLeft()
   rotateLeft()
@@ -246,7 +253,7 @@ end
 --   Dig functions
 -- =================
 
-function dig() -- make it so it can handle gravel and sand and other falling blocks
+function dig()
   if quick_check_inv_full() then deposit() end
 
   if turtle.detect() then
@@ -306,17 +313,75 @@ function digBack()
   return dig()
 end
 
+function digTo() -- #!to be tested!
+  -- move on z axis
+  if z < variables.z then
+    turnTo("north")
+  elseif z > variables.z then
+    turnTo("south")
+  end
+  while not (z == variables.z) do
+    dig()
+    moveForward()
+  end
+  -- move on x axis
+  if x < variables.x then
+    turnTo("west")
+  else
+    turnTo("east")
+  end
+  while not (x == variables.x) do
+    dig()
+    moveForward()
+  end
+  -- move on y axis
+  while not (y == variables.y) do
+    if y < variables.y then
+      digDown()
+      moveDown()
+    else
+      digUp()
+      moveUp()
+    end
+  end
+
+end
+
 -- =====================
 --   Special functions
 -- =====================
+
+function translate(input)
+  if input == "north" then return {0,-1}
+  elseif input == "south" then return {0,1}
+  elseif input == "east" then return {1,0}
+  elseif input == "west" then return {-1,0}
+  elseif input[1] == 0 and input[2] == -1 then return "north"
+  elseif input[1] == 0 and input[2] == 1 then return "south"
+  elseif input[1] == 1 and input[2] == 0 then return "east"
+  elseif input[1] == -1 and input[2] == 0 then return "west" end
+end
 
 function placeDir(direction) -- maybe this will get handy in the future
   print("im a place function")
 end
 
--- maybe call it dig(direction) instead?
 function digDir(direction) -- maybe this will get handy in the future
   print("im a break function")
+end
+
+function checkInvSetup()
+  if start == 1 then return true end -- just in case...
+
+  for i=1,start-1 do -- checks inventory to where it starts depositing
+    turtle.select(i)
+    if turtle.getItemCount() == 0 then
+      print("You forgot to insert ender chests!")
+      return false
+    end
+  end
+
+  return true
 end
 
 function check_inv_full()
@@ -343,6 +408,34 @@ function quick_check_inv_full()
 
   return true
 end
+
+-- This will assume you know where the deposit chest is
+function depositTo(direction)
+  if direction == "up" then
+    for i=start,stop do
+      turtle.select(i)
+      turtle.dropUp(turtle.getItemCount())
+    end
+
+    turtle.select(1) -- to reset cursor position
+  elseif direction == "down" then
+    for i=start,stop do
+      turtle.select(i)
+      turtle.dropDown(turtle.getItemCount())
+    end
+
+    turtle.select(1) -- to reset cursor position
+  elseif direction == "front" then
+    for i=start,stop do
+      turtle.select(i)
+      turtle.drop(turtle.getItemCount())
+    end
+
+    turtle.select(1) -- to reset cursor position
+  end
+end --[[ asdfasdfasdfasdfasdfasdf
+asdfasdfasdfasdfadsf
+asdfsadfadsfasdf --]]
 
 -- TODO:: - prettify to use fv.translate and keep original direction and then
 --          turn back
@@ -414,6 +507,7 @@ end
 
 -- This will assume you have the right inventory placement!
 function deposit()
+  turtle.select(1)
   local space = "" -- initialise variable, might not be needed
 
   if force.up then
@@ -446,7 +540,7 @@ function deposit()
   end
 
   if space == "left" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -456,7 +550,7 @@ function deposit()
     rotateRight()
 
   elseif space == "right" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -466,7 +560,7 @@ function deposit()
     rotateLeft()
 
   elseif space == "back" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
@@ -476,7 +570,7 @@ function deposit()
     rotateLeft()
     rotateLeft()
   elseif space == "up" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.dropUp(turtle.getItemCount())
     end
@@ -484,7 +578,7 @@ function deposit()
     turtle.select(1) -- to reset cursor position
     turtle.digUp()
   elseif space == "down" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.dropDown(turtle.getItemCount())
     end
@@ -492,7 +586,7 @@ function deposit()
     turtle.select(1) -- to reset cursor position
     turtle.digDown()
   elseif space == "front" then
-    for i=3,16 do
+    for i=start,stop do
       turtle.select(i)
       turtle.drop(turtle.getItemCount())
     end
