@@ -11,6 +11,8 @@ if not modules.hasModule("plethora:kinetic", 0) then error("Must have a kinetic 
 local meta = {}
 local hover = false
 
+print("You might want to use keyboard in the neural interface.")
+
 parallel.waitForAny(
     function()
         while true do
@@ -24,14 +26,15 @@ parallel.waitForAny(
             elseif event == "key" and key == keys.leftAlt then
                 -- The l key launches you in whatever direction you are looking.
                 modules.launch(meta.yaw, meta.pitch, 0.8)
-            elseif event == "key" and key == keys.k then
+            elseif event == "key_up" and key == keys.k then
                 -- Holding the K key enables "hover" mode. We disable it when it is released.
                 if not hover then
                     hover = true
                     os.queueEvent("hover")
+                else
+                    hover = false
                 end
             elseif event == "key_up" and key == keys.k then
-                hover = false
             end
         end
     end,

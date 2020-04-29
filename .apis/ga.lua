@@ -18,16 +18,43 @@ TODO:
  - make the api recognise if it is running on advanced or regular machine and
    use colors accordingly
  - use this for logging in other programs and APIs
+ - maybe differentiate with terms.isColor() to get if its advanced or not
+ - maybe pass that as a 2nd argument? (bool)
 
 --]]
+
+-- =================
+--   Detect device
+-- =================
+
+-- Determine current device
+
+function getDeviceType()
+  if turtle then
+    return "turtle"
+  elseif peripheral.find("neuralInterface") then
+    return "neural_interface"
+  elseif pocket then
+    return "pocket"
+  elseif commands then
+    return "command_computer"
+  else
+    return "computer"
+  end
+end
 
 -- =================
 --   Log functions
 -- =================
 
-function printLog(input, color) -- TODO: delete this sooner or later
-  -- if its advanced use colours
-  print(input)
+function printLog(input, color)
+  if term.isColor() then
+    term.setTextColor(colors[color])
+    print(input)
+    term.setTextColor(colors.white)
+  else
+    print(input)
+  end
 end
 
 -- Print info
@@ -46,23 +73,12 @@ function pErr(input)
 end
 
 
-
 -- ===================
 --   Other functions
 -- ===================
 
--- Determine current device
-
-local function getDeviceType()
-  if turtle then
-    return "turtle"
-  elseif pocket then
-    return "pocket"
-  elseif commands then
-    return "command_computer"
-  else
-    return "computer"
-  end
+function placeholder()
+  pWarn("Just a placeholder.")
 end
 
 

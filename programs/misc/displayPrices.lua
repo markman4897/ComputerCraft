@@ -35,5 +35,3 @@ fs.delete(fileName)
 
 print("result[4][1] (4th row, 1st column)")
 print(result[4][1])
-
-return result
